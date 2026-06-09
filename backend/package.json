@@ -1,0 +1,24 @@
+{
+  "name": "draftbit-locations-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cloudflare Worker serving the static locations dataset for the draftbit app.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "workerd", "sharp"]
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250101.0",
+    "typescript": "~5.9.3",
+    "vitest": "^2.1.8",
+    "wrangler": "^4.0.0"
+  }
+}
