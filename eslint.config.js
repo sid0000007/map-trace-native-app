@@ -17,6 +17,23 @@ module.exports = [
     },
   },
   {
+    // Jest globals for tests and manual mocks.
+    files: ['**/*.test.ts', '**/*.test.tsx', '__mocks__/**/*.{ts,tsx}', '__tests__/**/*.{ts,tsx}'],
+    languageOptions: {
+      globals: {
+        jest: 'readonly',
+        describe: 'readonly',
+        it: 'readonly',
+        test: 'readonly',
+        expect: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly',
+      },
+    },
+  },
+  {
     ignores: ['dist/*', '.expo/*', 'coverage/*', 'phases/*', 'node_modules/*'],
   },
 ];
