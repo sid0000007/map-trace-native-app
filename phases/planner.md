@@ -103,7 +103,7 @@ React Query hooks  ──────────►  Service Layer (LocationSer
 | 2     | Backend API             | Completed |
 | 3     | Frontend Core           | Completed |
 | 4     | Testing                 | Completed |
-| 5     | Deployment              | Pending |
+| 5     | Deployment              | Completed |
 | 6     | Documentation           | Pending |
 
 > Status values: **Pending → In Progress → Completed**. Keep this table, the matching
