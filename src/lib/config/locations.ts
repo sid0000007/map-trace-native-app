@@ -13,3 +13,6 @@ export function createLocationService(): LocationService {
   const repository = new HttpLocationRepository(httpClient);
   return new LocationService(repository);
 }
+
+/** App-wide singleton consumed by the query hooks. */
+export const locationService = createLocationService();

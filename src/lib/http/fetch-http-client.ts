@@ -1,10 +1,11 @@
+import { HttpError, NetworkError, TimeoutError } from './errors';
 import type { IHttpClient } from './http-client';
 
 /**
- * `fetch`-based {@link IHttpClient}. Owns base-URL joining, request timeout, and
- * mapping failures to {@link HttpError}/{@link NetworkError}/{@link TimeoutError}.
- *
- * Phase 1: typed stub. Implementation lands in Phase 3.
+ * `fetch`-based {@link IHttpClient}. Joins the base URL, enforces a request
+ * timeout via AbortController, and maps low-level failures onto the typed error
+ * classes ({@link HttpError}/{@link NetworkError}/{@link TimeoutError}). Returns
+ * the raw JSON body as `unknown` — validation is the repository's job.
  */
 export class FetchHttpClient implements IHttpClient {
   constructor(
@@ -12,9 +13,35 @@ export class FetchHttpClient implements IHttpClient {
     private readonly timeoutMs: number = 8000,
   ) {}
 
-  getJson(path: string): Promise<unknown> {
-    throw new Error(
-      `FetchHttpClient.getJson not implemented yet (url: ${this.baseUrl}${path}, timeout: ${this.timeoutMs}ms)`,
-    );
+  async getJson(path: string): Promise<unknown> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), this.timeoutMs);
+
+    let response: Response;
+    try {
+      response = await fetch(`${this.baseUrl}${path}`, {
+        method: 'GET',
+        headers: { Accept: 'application/json' },
+        signal: controller.signal,
+      });
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new TimeoutError(`Request to ${path} timed out after ${this.timeoutMs}ms`);
+      }
+      const reason = error instanceof Error ? error.message : 'unknown error';
+      throw new NetworkError(`Network request to ${path} failed: ${reason}`);
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    if (!response.ok) {
+      throw new HttpError(`Request to ${path} failed with status ${response.status}`, response.status);
+    }
+
+    try {
+      return await response.json();
+    } catch {
+      throw new NetworkError(`Failed to parse JSON response from ${path}`);
+    }
   }
 }
