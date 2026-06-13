@@ -1,5 +1,10 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image } from 'expo-image';
+import { memo } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import type { Location } from '../types/location.schema';
+
+// Neutral blurhash shown while the remote image decodes.
+const IMAGE_PLACEHOLDER = 'L6PZfSi_.AyE_3t7t7R**0o#DgR4';
 
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
@@ -11,13 +16,17 @@ function DetailRow({ label, value }: { label: string; value: string }) {
 }
 
 /** Presentational detail view for a single location. */
-export function LocationDetailCard({ location }: { location: Location }) {
+function LocationDetailCardComponent({ location }: { location: Location }) {
   return (
     <View style={styles.container}>
       {location.imageUrl ? (
         <Image
-          source={{ uri: location.imageUrl }}
+          source={location.imageUrl}
           style={styles.image}
+          contentFit="cover"
+          transition={200}
+          cachePolicy="memory-disk"
+          placeholder={{ blurhash: IMAGE_PLACEHOLDER }}
           accessibilityLabel={location.name}
         />
       ) : null}
@@ -36,6 +45,8 @@ export function LocationDetailCard({ location }: { location: Location }) {
     </View>
   );
 }
+
+export const LocationDetailCard = memo(LocationDetailCardComponent);
 
 const styles = StyleSheet.create({
   container: {

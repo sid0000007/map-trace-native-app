@@ -105,6 +105,7 @@ React Query hooks  ──────────►  Service Layer (LocationSer
 | 4     | Testing                 | Completed |
 | 5     | Deployment              | Completed |
 | 6     | Documentation           | Completed |
+| 7     | Frontend Optimization   | Completed |
 
 > Status values: **Pending → In Progress → Completed**. Keep this table, the matching
 > phase file, and `phase.env` in lock-step after every phase.

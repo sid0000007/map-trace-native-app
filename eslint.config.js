@@ -34,6 +34,14 @@ module.exports = [
     },
   },
   {
-    ignores: ['dist/*', '.expo/*', 'coverage/*', 'phases/*', 'node_modules/*'],
+    ignores: [
+      'dist/*',
+      '.expo/*',
+      'coverage/*',
+      'phases/*',
+      'node_modules/*',
+      'webapp/**',
+      'backend/**',
+    ],
   },
 ];

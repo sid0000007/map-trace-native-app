@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import MapView, { Marker, type Region } from 'react-native-maps';
 import type { Location } from '../types/location.schema';
@@ -30,6 +31,30 @@ function computeRegion(locations: Location[]): Region | undefined {
   };
 }
 
+interface LocationMarkerProps {
+  location: Location;
+  onSelect: (id: string) => void;
+}
+
+/**
+ * Memoized marker. `tracksViewChanges={false}` stops react-native-maps from
+ * continuously re-rendering the marker view, and `memo` keeps markers from
+ * rebuilding when the parent re-renders (e.g. on refetch) as long as `onSelect`
+ * is stable.
+ */
+const LocationMarker = memo(function LocationMarker({ location, onSelect }: LocationMarkerProps) {
+  return (
+    <Marker
+      identifier={location.id}
+      coordinate={{ latitude: location.latitude, longitude: location.longitude }}
+      title={location.name}
+      description={location.category}
+      tracksViewChanges={false}
+      onPress={() => onSelect(location.id)}
+    />
+  );
+});
+
 interface LocationMapProps {
   locations: Location[];
   onSelect: (id: string) => void;
@@ -37,17 +62,12 @@ interface LocationMapProps {
 
 /** Presentational map: renders one marker per location and reports taps. */
 export function LocationMap({ locations, onSelect }: LocationMapProps) {
+  const region = useMemo(() => computeRegion(locations), [locations]);
+
   return (
-    <MapView style={styles.map} initialRegion={computeRegion(locations)}>
+    <MapView style={styles.map} initialRegion={region}>
       {locations.map((location) => (
-        <Marker
-          key={location.id}
-          identifier={location.id}
-          coordinate={{ latitude: location.latitude, longitude: location.longitude }}
-          title={location.name}
-          description={location.category}
-          onPress={() => onSelect(location.id)}
-        />
+        <LocationMarker key={location.id} location={location} onSelect={onSelect} />
       ))}
     </MapView>
   );

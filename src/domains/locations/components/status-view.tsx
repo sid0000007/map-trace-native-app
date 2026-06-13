@@ -1,17 +1,24 @@
+import { memo } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 /** Centered loading spinner with an optional label. */
-export function LoadingView({ label = 'Loading…' }: { label?: string }) {
+export const LoadingView = memo(function LoadingView({ label = 'Loading…' }: { label?: string }) {
   return (
     <View style={styles.container} accessibilityRole="progressbar">
       <ActivityIndicator size="large" />
       <Text style={styles.label}>{label}</Text>
     </View>
   );
-}
+});
 
 /** Centered error message with an optional retry button. */
-export function ErrorView({ message, onRetry }: { message: string; onRetry?: () => void }) {
+export const ErrorView = memo(function ErrorView({
+  message,
+  onRetry,
+}: {
+  message: string;
+  onRetry?: () => void;
+}) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Something went wrong</Text>
@@ -28,16 +35,16 @@ export function ErrorView({ message, onRetry }: { message: string; onRetry?: () 
       ) : null}
     </View>
   );
-}
+});
 
 /** Centered empty-state message. */
-export function EmptyView({ message }: { message: string }) {
+export const EmptyView = memo(function EmptyView({ message }: { message: string }) {
   return (
     <View style={styles.container}>
       <Text style={styles.message}>{message}</Text>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
