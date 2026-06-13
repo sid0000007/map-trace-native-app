@@ -29,8 +29,13 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <Providers>{children}</Providers>
+      <body className="min-h-full bg-muted">
+        <Providers>
+          {/* Mobile-only UI: a phone-width column, centered on larger screens. */}
+          <div className="mx-auto flex min-h-screen w-full max-w-[28rem] flex-col bg-background shadow-sm">
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );
