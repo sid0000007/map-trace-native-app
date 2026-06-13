@@ -33,7 +33,7 @@ function computeRegion(locations: Location[]): Region | undefined {
 
 interface LocationMarkerProps {
   location: Location;
-  onSelect: (id: string) => void;
+  onSelect?: (id: string) => void;
 }
 
 /**
@@ -50,14 +50,15 @@ const LocationMarker = memo(function LocationMarker({ location, onSelect }: Loca
       title={location.name}
       description={location.category}
       tracksViewChanges={false}
-      onPress={() => onSelect(location.id)}
+      onPress={() => onSelect?.(location.id)}
     />
   );
 });
 
 interface LocationMapProps {
   locations: Location[];
-  onSelect: (id: string) => void;
+  /** Optional: called with the location id when a marker is tapped (omit for a display-only map). */
+  onSelect?: (id: string) => void;
 }
 
 /** Presentational map: renders one marker per location and reports taps. */

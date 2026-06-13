@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import { memo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { LocationMap } from './location-map';
 import type { Location } from '../types/location.schema';
 
 // Neutral blurhash shown while the remote image decodes.
@@ -42,6 +43,13 @@ function LocationDetailCardComponent({ location }: { location: Location }) {
           value={`${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}`}
         />
       </View>
+
+      <View style={styles.mapSection}>
+        <Text style={styles.rowLabel}>Location</Text>
+        <View style={styles.map}>
+          <LocationMap locations={[location]} />
+        </View>
+      </View>
     </View>
   );
 }
@@ -82,6 +90,16 @@ const styles = StyleSheet.create({
   rows: {
     marginTop: 4,
     gap: 8,
+  },
+  mapSection: {
+    marginTop: 4,
+    gap: 6,
+  },
+  map: {
+    height: 220,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: '#eee',
   },
   row: {
     gap: 2,
